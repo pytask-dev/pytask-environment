@@ -1,0 +1,23 @@
+name: pytask-environment
+channels:
+  - conda-forge
+  - pytask
+dependencies:
+  - python=3.8
+  - pip
+
+  # Conda
+  - anaconda-client
+  - conda-build
+  - conda-verify
+
+  # Package dependencies
+  - pytask >= 0.0.7
+
+  # Misc
+  - bumpversion
+  - jupyterlab
+  - pdbpp
+  - pre-commit
+  - pytest-cov
+  - pytest-xdist
