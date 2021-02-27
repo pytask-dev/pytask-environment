@@ -5,7 +5,6 @@ from setuptools import setup
 
 import versioneer
 
-
 README = Path("README.rst").read_text()
 
 PROJECT_URLS = {
