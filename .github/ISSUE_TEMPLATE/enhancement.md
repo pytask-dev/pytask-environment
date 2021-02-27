@@ -1,7 +1,7 @@
 ---
 
 name: Enhancement
-about: Suggest an idea for pytask-latex
+about: Suggest an idea for pytask-environment
 title: "ENH:"
 labels: "enhancement"
 
@@ -9,7 +9,7 @@ labels: "enhancement"
 
 #### Is your feature request related to a problem?
 
-Provide a description of what the problem is, e.g. "I wish I could use pytask-latex
+Provide a description of what the problem is, e.g. "I wish I could use pytask-environment
 to do [...]".
 
 #### Describe the solution you'd like
