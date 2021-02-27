@@ -7,7 +7,7 @@ all releases are available on `Anaconda.org
 <https://anaconda.org/pytask/pytask-environment>`_.
 
 
-0.0.2 - 2021-xx-xx
+0.0.2 - 2021-02-27
 ------------------
 
 - :gh:`3` prepares pytask-environment to be published on PyPI, adds versioneer, and
