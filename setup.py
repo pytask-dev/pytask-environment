@@ -39,9 +39,11 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
+    install_requires=["pytask >0.0.7"],
     platforms="any",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     entry_points={"pytask": ["pytask_environment = pytask_environment.plugin"]},
+    include_package_data=True,
     zip_false=False,
 )
