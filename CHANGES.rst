@@ -10,7 +10,7 @@ all releases are available on `Anaconda.org
 0.0.3 - 2021-03-03
 ------------------
 
-- :gh:`5` adds dependencies to ``setup.py``.
+- :gh:`5` adds dependencies to ``setup.py`` and missing ``README.rst`` to package.
 
 
 0.0.2 - 2021-02-27
