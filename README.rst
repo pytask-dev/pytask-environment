@@ -6,17 +6,18 @@
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/pytask-environment
 
-.. image:: https://anaconda.org/pytask/pytask-environment/badges/version.svg
-    :target: https://anaconda.org/pytask/pytask-environment
+.. image:: https://img.shields.io/conda/vn/conda-forge/pytask-environment.svg
+    :target: https://anaconda.org/conda-forge/pytask-environment
 
-.. image:: https://anaconda.org/pytask/pytask-environment/badges/platforms.svg
-    :target: https://anaconda.org/pytask/pytask-environment
-
-.. image:: https://github.com/pytask-dev/pytask-environment/workflows/Continuous%20Integration%20Workflow/badge.svg?branch=main
-    :target: https://github.com/pytask-dev/pytask/actions?query=branch%3Amain
+.. image:: https://img.shields.io/conda/pn/conda-forge/pytask-environment.svg
+    :target: https://anaconda.org/conda-forge/pytask-environment
 
 .. image:: https://img.shields.io/pypi/l/pytask-environment
     :alt: PyPI - License
+    :target: https://pypi.org/project/pytask-environment
+
+.. image:: https://img.shields.io/github/workflow/status/pytask-dev/pytask-environment/Continuous%20Integration%20Workflow/main
+   :target: https://github.com/pytask-dev/pytask-environment/actions?query=branch%3Amain
 
 .. image:: https://codecov.io/gh/pytask-dev/pytask-environment/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/pytask-dev/pytask-environment
@@ -41,7 +42,8 @@ Installation
 ------------
 
 pytask-environment is available on `PyPI <https://pypi.org/project/pytask-environment>`_
-and `Anaconda.org <https://anaconda.org/pytask/pytask-environment>`_. Install it with
+and `Anaconda.org <https://anaconda.org/conda-forge/pytask-environment>`_. Install it
+with
 
 .. code-block:: console
 
@@ -49,8 +51,7 @@ and `Anaconda.org <https://anaconda.org/pytask/pytask-environment>`_. Install it
 
     # or
 
-    $ conda config --add channels conda-forge --add channels pytask
-    $ conda install pytask-environment
+    $ conda install -c conda-forge pytask-environment
 
 
 Usage
