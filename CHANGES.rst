@@ -7,6 +7,12 @@ reverse chronological order. Releases follow `semantic versioning
 <https://anaconda.org/conda-forge/pytask-environment>`_.
 
 
+0.0.5 - 2021-07-23
+------------------
+
+- :gh:`8` replaces versioneer with setuptools-scm.
+
+
 0.0.4 - 2021-03-05
 ------------------
 
