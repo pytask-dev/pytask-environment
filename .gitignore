@@ -16,4 +16,4 @@ __pycache__
 
 build
 dist
-src/pytask_latex/_version.py
+src/pytask_environment/_version.py
