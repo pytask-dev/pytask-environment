@@ -24,4 +24,3 @@ dependencies:
   - pdbpp
   - pre-commit
   - pytest-cov
-  - pytest-xdist
