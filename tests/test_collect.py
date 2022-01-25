@@ -62,16 +62,19 @@ def test_prompt_when_python_version_has_changed(monkeypatch, tmp_path, runner):
 
     # Run without knowing the python version and without updating the environment.
     result = runner.invoke(cli)
+    print(result.output)
     assert result.exit_code == 1
 
     # Run with updating the environment.
     result = runner.invoke(cli, ["--update-environment"])
+    print(result.output)
     assert result.exit_code == 0
 
     # Run with a fake version and not updating the environment.
     monkeypatch.setattr("pytask_environment.collect.sys.version", fake_version)
 
     result = runner.invoke(cli)
+    print(result.output)
     assert result.exit_code == 1
 
     with orm.db_session:
@@ -88,6 +91,7 @@ def test_prompt_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     monkeypatch.setattr("pytask_environment.collect.sys.executable", "new_path")
 
     result = runner.invoke(cli, ["--update-environment"])
+    print(result.output)
     assert result.exit_code == 0
 
     with orm.db_session:
