@@ -61,13 +61,6 @@ If the user attempts to build the project and the Python version has been cached
 database in a previous run, an invocation with a different environment will produce the
 following command line output.
 
-.. code-block:: console
-
-    $ pytask build
-    Your Python environment seems to have changed. The Python version has
-    changed. The path to the Python executable has changed. Do you want
-    to continue with the current environment? [y/N]:
-
 
 Future development
 ------------------

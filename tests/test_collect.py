@@ -12,31 +12,24 @@ from pytask_environment.database import Environment
 @pytest.mark.end_to_end
 def test_existence_of_python_executable_in_db(tmp_path, runner):
     """Test that the Python executable is stored in the database."""
-    source = """
-    import pytask
-
-    def task_dummy():
-        pass
-    """
     task_path = tmp_path.joinpath("task_dummy.py")
-    task_path.write_text(textwrap.dedent(source))
+    task_path.write_text(textwrap.dedent("def task_dummy(): pass"))
 
     os.chdir(tmp_path)
     result = runner.invoke(cli)
 
     assert result.exit_code == 0
 
-    orm.db_session.__enter__()
+    with orm.db_session:
 
-    create_database(
-        "sqlite", tmp_path.joinpath(".pytask.sqlite3").as_posix(), True, False
-    )
+        create_database(
+            "sqlite", tmp_path.joinpath(".pytask.sqlite3").as_posix(), True, False
+        )
 
-    python = Environment["python"]
+        python = Environment["python"]
+
     assert python.version == sys.version
     assert python.path == sys.executable
-
-    orm.db_session.__exit__()
 
 
 @pytest.mark.skipif(
@@ -61,51 +54,47 @@ def test_prompt_when_python_version_has_changed(monkeypatch, tmp_path, runner):
         "[MSC v.1916 64 bit (AMD64)]"
     )
 
-    source = """
-    import pytask
-
-    def task_dummy():
-        pass
-    """
+    source = "def task_dummy(): pass"
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent(source))
 
     os.chdir(tmp_path)
-    result = runner.invoke(cli)
 
+    # Run without knowing the python version and without updating the environment.
+    result = runner.invoke(cli)
+    assert result.exit_code == 1
+
+    # Run with updating the environment.
+    result = runner.invoke(cli, ["--update-environment"])
     assert result.exit_code == 0
 
+    # Run with a fake version and not updating the environment.
     monkeypatch.setattr("pytask_environment.collect.sys.version", fake_version)
 
-    result = runner.invoke(cli, input="N")
-    assert result.exit_code == 3
+    result = runner.invoke(cli)
+    assert result.exit_code == 1
 
-    orm.db_session.__enter__()
+    with orm.db_session:
+        create_database(
+            "sqlite", tmp_path.joinpath(".pytask.sqlite3").as_posix(), True, False
+        )
+        python = Environment["python"]
 
-    create_database(
-        "sqlite", tmp_path.joinpath(".pytask.sqlite3").as_posix(), True, False
-    )
-
-    python = Environment["python"]
     assert python.version == real_python_version
     assert python.path == real_python_executable
 
-    orm.db_session.__exit__()
-
+    # Run with a fake version and updating the environment.
     monkeypatch.setattr("pytask_environment.collect.sys.version", fake_version)
     monkeypatch.setattr("pytask_environment.collect.sys.executable", "new_path")
 
-    result = runner.invoke(cli, input="y")
+    result = runner.invoke(cli, ["--update-environment"])
     assert result.exit_code == 0
 
-    orm.db_session.__enter__()
+    with orm.db_session:
+        create_database(
+            "sqlite", tmp_path.joinpath(".pytask.sqlite3").as_posix(), True, False
+        )
+        python = Environment["python"]
 
-    create_database(
-        "sqlite", tmp_path.joinpath(".pytask.sqlite3").as_posix(), True, False
-    )
-
-    python = Environment["python"]
     assert python.version == fake_version
     assert python.path == "new_path"
-
-    orm.db_session.__exit__()

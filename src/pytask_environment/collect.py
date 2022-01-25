@@ -1,15 +1,21 @@
 import sys
 
-import click
 from _pytask.config import hookimpl
-from _pytask.exceptions import CollectionError
+from _pytask.console import console
 from pony import orm
 from pytask_environment.database import Environment
 
 
+_ERROR_MSG = """\
+Aborted execution due to a bad state of the environment. Either switch to the correct
+environment or update the information on the environment using the --update-environment
+flag.
+"""
+
+
 @hookimpl(trylast=True)
-def pytask_log_session_header():
-    """Use the entry-point to implement an early exit.
+def pytask_log_session_header(session) -> None:
+    """Check environment and python version.
 
     The solution is hacky. Exploit the first entry-point in the build process after the
     database is created.
@@ -18,37 +24,44 @@ def pytask_log_session_header():
     the user whether she wants to proceed.
 
     """
-    same_version, same_path = have_version_or_path_changed(
-        "python", sys.version, sys.executable
-    )
-    if not same_version or not same_path:
-        message = "\nYour Python environment seems to have changed."
-        message += " The Python version has changed." if not same_version else ""
-        message += (
-            " The path to the Python executable has changed." if not same_path else ""
-        )
-        message += " Do you want to continue with the current environment?"
+    __tracebackhide__ = True
 
-        if click.confirm(message):
-            create_or_update_state("python", sys.version, sys.executable)
-        else:
-            raise CollectionError
+    package = retrieve_package("python")
+
+    same_version = True if package is None else sys.version == package.version
+    same_path = True if package is None else sys.executable == package.path
+
+    msg = ""
+    if not same_version and session.config["check_python_version"]:
+        msg += " The Python version has changed "
+        if package is not None:
+            msg += f"from\n\n{package.version}\n\n"
+        msg += f"to\n\n{sys.version}\n\n"
+    if not same_path and session.config["check_environment"]:
+        msg += "The path to the Python interpreter has changed "
+        if package is not None:
+            msg += f"from\n\n{package.path}\n\n"
+        msg += f"to\n\n{sys.executable}."
+
+    if msg:
+        msg = "Your Python environment has changed." + msg
+
+    if session.config["update_environment"] or package is None:
+        console.print("Update the information in the database.")
+        create_or_update_state("python", sys.version, sys.executable)
+    else:
+        console.print()
+        raise Exception(msg + "\n\n" + _ERROR_MSG) from None
 
 
 @orm.db_session
-def have_version_or_path_changed(name, version, path):
+def retrieve_package(name):
     """Return booleans indicating whether the version or path of a package changed."""
     try:
         package = Environment[name]
     except orm.ObjectNotFound:
-        Environment(name=name, version=version, path=path)
-        same_version = True
-        same_path = True
-    else:
-        same_version = package.version == version
-        same_path = package.path == path
-
-    return same_version, same_path
+        package = None
+    return package
 
 
 @orm.db_session
