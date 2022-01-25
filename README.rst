@@ -57,9 +57,23 @@ with
 Usage
 -----
 
-If the user attempts to build the project and the Python version has been cached in the
-database in a previous run, an invocation with a different environment will produce the
-following command line output.
+If the user attempts to build the project with ``pytask build`` and the Python version
+has been cached in the database in a previous run, an invocation with a different
+environment will produce the following command line output.
+
+.. image:: _static/error.png
+
+Running the same command with ``pytask --update-environment`` will update the
+information on the environment.
+
+To disable either checking the path or the version, set the following configuration to a
+falsy value.
+
+.. code-block:: ini
+
+    check_python_version = False  # True by default
+
+    check_environment = False  # True by default
 
 
 Future development
