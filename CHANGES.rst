@@ -10,7 +10,8 @@ reverse chronological order. Releases follow `semantic versioning
 0.1.0 - 2022-01-25
 ------------------
 
-- :gh:`10` replaces the input prompts with configuration values and flags.
+- :gh:`10` replaces the input prompts with configuration values and flags, removes the
+  conda recipe, and abort simultaneously running builds.
 
 
 0.0.6 - 2021-07-23
