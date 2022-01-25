@@ -71,6 +71,8 @@ falsy value.
 
 .. code-block:: ini
 
+    # Content of pytask.ini, setup.cfg, or tox.ini
+
     check_python_version = False  # True by default
 
     check_environment = False  # True by default
