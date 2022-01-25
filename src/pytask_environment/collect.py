@@ -26,14 +26,25 @@ def pytask_log_session_header(session) -> None:
     """
     __tracebackhide__ = True
 
+    # If no checks are requested, skip.
+    if (
+        not session.config["check_python_version"]
+        and not session.config["check_environment"]
+    ):
+        return None
+
     package = retrieve_package("python")
 
-    same_version = True if package is None else sys.version == package.version
-    same_path = True if package is None else sys.executable == package.path
+    same_version = False if package is None else sys.version == package.version
+    same_path = False if package is None else sys.executable == package.path
+
+    # Bail out if everything is fine.
+    if same_version and same_path:
+        return None
 
     msg = ""
     if not same_version and session.config["check_python_version"]:
-        msg += " The Python version has changed "
+        msg += "The Python version has changed "
         if package is not None:
             msg += f"from\n\n{package.version}\n\n"
         msg += f"to\n\n{sys.version}\n\n"
@@ -44,10 +55,10 @@ def pytask_log_session_header(session) -> None:
         msg += f"to\n\n{sys.executable}."
 
     if msg:
-        msg = "Your Python environment has changed." + msg
+        msg = "Your Python environment has changed. " + msg
 
     if session.config["update_environment"] or package is None:
-        console.print("Update the information in the database.")
+        console.print("Updating the information in the database.")
         create_or_update_state("python", sys.version, sys.executable)
     else:
         console.print()

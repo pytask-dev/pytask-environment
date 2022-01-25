@@ -73,9 +73,9 @@ falsy value.
 
     # Content of pytask.ini, setup.cfg, or tox.ini
 
-    check_python_version = False  # True by default
+    check_python_version = false  # true by default
 
-    check_environment = False  # True by default
+    check_environment = false  # true by default
 
 
 Future development
