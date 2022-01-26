@@ -57,16 +57,30 @@ with
 Usage
 -----
 
-If the user attempts to build the project and the Python version has been cached in the
-database in a previous run, an invocation with a different environment will produce the
-following command line output.
+If the user attempts to build the project with ``pytask build`` and the Python version
+has been cached in the database in a previous run, an invocation with a different
+environment will produce the following command line output.
+
+.. image:: _static/error.png
+
+Running
 
 .. code-block:: console
 
-    $ pytask build
-    Your Python environment seems to have changed. The Python version has
-    changed. The path to the Python executable has changed. Do you want
-    to continue with the current environment? [y/N]:
+    $ pytask --update-environment
+
+will update the information on the environment.
+
+To disable either checking the path or the version, set the following configuration to a
+falsy value.
+
+.. code-block:: ini
+
+    # Content of pytask.ini, setup.cfg, or tox.ini
+
+    check_python_version = false  # true by default
+
+    check_environment = false  # true by default
 
 
 Future development

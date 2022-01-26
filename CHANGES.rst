@@ -7,10 +7,23 @@ reverse chronological order. Releases follow `semantic versioning
 <https://anaconda.org/conda-forge/pytask-environment>`_.
 
 
-0.0.5 - 2021-07-23
+0.1.0 - 2022-01-25
+------------------
+
+- :gh:`10` replaces the input prompts with configuration values and flags, removes the
+  conda recipe, and abort simultaneously running builds.
+
+
+0.0.6 - 2021-07-23
 ------------------
 
 - :gh:`8` replaces versioneer with setuptools-scm.
+
+
+0.0.5 - 2021-07-23
+------------------
+
+- :gh:`7` adds some pre-commit updates.
 
 
 0.0.4 - 2021-03-05
