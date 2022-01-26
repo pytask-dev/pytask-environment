@@ -63,8 +63,13 @@ environment will produce the following command line output.
 
 .. image:: _static/error.png
 
-Running the same command with ``pytask --update-environment`` will update the
-information on the environment.
+Running
+
+.. code-block:: console
+
+    $ pytask --update-environment
+
+will update the information on the environment.
 
 To disable either checking the path or the version, set the following configuration to a
 falsy value.
