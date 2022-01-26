@@ -60,9 +60,7 @@ def pytask_log_session_header(session) -> None:
     if session.config["update_environment"] or package is None:
         console.print("Updating the information in the database.")
         create_or_update_state("python", sys.version, sys.executable)
-    elif (not same_version and not session.config["check_python_version"]) and (
-        not same_path and not session.config["check_python_version"]
-    ):
+    elif not msg:
         pass
     else:
         console.print()

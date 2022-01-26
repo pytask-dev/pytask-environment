@@ -63,7 +63,7 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
-    monkeypatch.setattr("pytask_environment.collect.sys.version", fake_version)
+    monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
 
     result = runner.invoke(cli)
     assert result.exit_code == 1
@@ -75,8 +75,8 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     assert python.path == real_python_executable
 
     # Run with a fake version and updating the environment.
-    monkeypatch.setattr("pytask_environment.collect.sys.version", fake_version)
-    monkeypatch.setattr("pytask_environment.collect.sys.executable", "new_path")
+    monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
+    monkeypatch.setattr("pytask_environment.logging.sys.executable", "new_path")
 
     result = runner.invoke(cli, ["--update-environment"])
     assert result.exit_code == 0
@@ -114,7 +114,7 @@ def test_python_version_changed(
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
-    monkeypatch.setattr("pytask_environment.collect.sys.version", fake_version)
+    monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
 
     result = runner.invoke(cli, [tmp_path.as_posix()])
     assert result.exit_code == expected
@@ -143,7 +143,7 @@ def test_environment_changed(
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
-    monkeypatch.setattr("pytask_environment.collect.sys.executable", "new_path")
+    monkeypatch.setattr("pytask_environment.logging.sys.executable", "new_path")
 
     result = runner.invoke(cli, [tmp_path.as_posix()])
     assert result.exit_code == expected
