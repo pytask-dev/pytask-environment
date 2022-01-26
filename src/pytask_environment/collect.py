@@ -7,9 +7,9 @@ from pytask_environment.database import Environment
 
 
 _ERROR_MSG = """\
-Aborted execution due to a bad state of the environment. Either switch to the correct
-environment or update the information on the environment using the --update-environment
-flag.
+Aborted execution due to a bad state of the environment. Either switch to the correct \
+environment or update the information on the environment using the --update-environment\
+ flag.
 """
 
 
@@ -60,6 +60,10 @@ def pytask_log_session_header(session) -> None:
     if session.config["update_environment"] or package is None:
         console.print("Updating the information in the database.")
         create_or_update_state("python", sys.version, sys.executable)
+    elif (not same_version and not session.config["check_python_version"]) and (
+        not same_path and not session.config["check_python_version"]
+    ):
+        pass
     else:
         console.print()
         raise Exception(msg + "\n\n" + _ERROR_MSG) from None
