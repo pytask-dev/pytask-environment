@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sys
 
 from _pytask.config import hookimpl

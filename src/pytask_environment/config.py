@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import click
 from _pytask.config import hookimpl
 from _pytask.shared import convert_truthy_or_falsy_to_bool
