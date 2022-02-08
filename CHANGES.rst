@@ -7,6 +7,12 @@ reverse chronological order. Releases follow `semantic versioning
 <https://anaconda.org/conda-forge/pytask-environment>`_.
 
 
+0.1.1 - 2022-02-08
+------------------
+
+- :gh:`13` deprecates Python 3.6 and adds support for Python 3.10.
+
+
 0.1.0 - 2022-01-25
 ------------------
 
