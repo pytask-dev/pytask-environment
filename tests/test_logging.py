@@ -4,9 +4,10 @@ import sys
 import textwrap
 
 import pytest
-from _pytask.database import db
 from pony import orm
 from pytask import cli
+from pytask import db
+from pytask import ExitCode
 from pytask_environment.database import Environment
 
 
@@ -19,7 +20,7 @@ def test_existence_of_python_executable_in_db(tmp_path, runner):
 
     result = runner.invoke(cli, [tmp_path.as_posix()])
 
-    assert result.exit_code == 0
+    assert result.exit_code == ExitCode.OK
 
     with orm.db_session:
         python = Environment["python"]
@@ -32,10 +33,6 @@ def test_existence_of_python_executable_in_db(tmp_path, runner):
             orm.delete(e for e in entity)
 
 
-@pytest.mark.skipif(
-    sys.platform == "win32" and sys.version_info[:2] == (3, 6),
-    reason="Error on Windows with Python 3.6",
-)
 @pytest.mark.end_to_end
 def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     """Test the whole use-case.
@@ -61,14 +58,14 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
 
     # Run without knowing the python version and without updating the environment.
     result = runner.invoke(cli, [tmp_path.as_posix()])
-    assert result.exit_code == 0
+    assert result.exit_code == ExitCode.OK
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
     monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
 
     result = runner.invoke(cli)
-    assert result.exit_code == 1
+    assert result.exit_code == ExitCode.FAILED
 
     with orm.db_session:
         python = Environment["python"]
@@ -80,8 +77,8 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
     monkeypatch.setattr("pytask_environment.logging.sys.executable", "new_path")
 
-    result = runner.invoke(cli, ["--update-environment"])
-    assert result.exit_code == 0
+    result = runner.invoke(cli, ["--update-environment", tmp_path.as_posix()])
+    assert result.exit_code == ExitCode.OK
 
     with orm.db_session:
         python = Environment["python"]
@@ -112,7 +109,7 @@ def test_python_version_changed(
 
     # Run without knowing the python version and without updating the environment.
     result = runner.invoke(cli, [tmp_path.as_posix()])
-    assert result.exit_code == 0
+    assert result.exit_code == ExitCode.OK
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
@@ -141,7 +138,7 @@ def test_environment_changed(
 
     # Run without knowing the python version and without updating the environment.
     result = runner.invoke(cli, [tmp_path.as_posix()])
-    assert result.exit_code == 0
+    assert result.exit_code == ExitCode.OK
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
