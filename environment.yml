@@ -14,5 +14,6 @@ dependencies:
   - pytask >= 0.0.7
 
   # Misc
+  - pre-commit
   - pytest
   - pytest-cov
