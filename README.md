@@ -47,9 +47,8 @@ will update the information on the environment.
 To disable either checking the path or the version, set the following configuration to a
 falsy value.
 
-```ini
-# Content of pytask.ini, setup.cfg, or tox.ini
-
+```toml
+[tool.pytask.ini_options]
 check_python_version = false  # true by default
 
 check_environment = false  # true by default
