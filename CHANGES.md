@@ -5,7 +5,7 @@ reverse chronological order. Releases follow [semantic versioning](https://semve
 and all releases are available on
 [Anaconda.org](https://anaconda.org/conda-forge/pytask-environment).
 
-## 0.2.0 - 2022-xx-xx
+## 0.2.0 - 2022-16-04
 
 - {pull}`15` aligns pytask-environment with pytask v0.2.0.
 
