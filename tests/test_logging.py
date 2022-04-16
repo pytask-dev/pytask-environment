@@ -34,7 +34,13 @@ def test_existence_of_python_executable_in_db(tmp_path, runner):
 
 
 @pytest.mark.end_to_end
-def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
+@pytest.mark.parametrize(
+    "config_file, content",
+    [("pytask.ini", "[pytask]"), ("pyproject.toml", "[tool.pytask.ini_options]")],
+)
+def test_flow_when_python_version_has_changed(
+    monkeypatch, tmp_path, runner, config_file, content
+):
     """Test the whole use-case.
 
     1. Run a simple task to cache the Python version and path.
@@ -51,7 +57,7 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
         "[MSC v.1916 64 bit (AMD64)]"
     )
 
-    tmp_path.joinpath("pytask.ini").write_text("[pytask]")
+    tmp_path.joinpath(config_file).write_text(content)
     source = "def task_dummy(): pass"
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent(source))
@@ -92,17 +98,22 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
 
 
 @pytest.mark.end_to_end
+@pytest.mark.parametrize(
+    "config_file, content",
+    [
+        ("pytask.ini", "[pytask]\ncheck_python_version = {}"),
+        ("pyproject.toml", "[tool.pytask.ini_options]\ncheck_python_version = {}"),
+    ],
+)
 @pytest.mark.parametrize("check_python_version, expected", [("true", 1), ("false", 0)])
 def test_python_version_changed(
-    monkeypatch, tmp_path, runner, check_python_version, expected
+    monkeypatch, tmp_path, runner, config_file, content, check_python_version, expected
 ):
     fake_version = (
         "2.7.8 | packaged by conda-forge | (default, Jul 31 2020, 01:53:57) "
         "[MSC v.1916 64 bit (AMD64)]"
     )
-    tmp_path.joinpath("pytask.ini").write_text(
-        f"[pytask]\ncheck_python_version = {check_python_version}"
-    )
+    tmp_path.joinpath(config_file).write_text(content.format(check_python_version))
     source = "def task_dummy(): pass"
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent(source))
@@ -125,13 +136,18 @@ def test_python_version_changed(
 
 
 @pytest.mark.end_to_end
+@pytest.mark.parametrize(
+    "config_file, content",
+    [
+        ("pytask.ini", "[pytask]\ncheck_environment = {}"),
+        ("pyproject.toml", "[tool.pytask.ini_options]\ncheck_environment = {}"),
+    ],
+)
 @pytest.mark.parametrize("check_python_version, expected", [("true", 1), ("false", 0)])
 def test_environment_changed(
-    monkeypatch, tmp_path, runner, check_python_version, expected
+    monkeypatch, tmp_path, runner, config_file, content, check_python_version, expected
 ):
-    tmp_path.joinpath("pytask.ini").write_text(
-        f"[pytask]\ncheck_environment = {check_python_version}"
-    )
+    tmp_path.joinpath(config_file).write_text(content.format(check_python_version))
     source = "def task_dummy(): pass"
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent(source))
