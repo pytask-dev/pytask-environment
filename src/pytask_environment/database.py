@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from _pytask.database import db
 from pony import orm
+from pytask import db
 
 
 class Environment(db.Entity):

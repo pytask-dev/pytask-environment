@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import sys
 
-from _pytask.config import hookimpl
-from _pytask.console import console
 from pony import orm
+from pytask import console
+from pytask import hookimpl
+from pytask import Session
 from pytask_environment.database import Environment
 
 
@@ -16,7 +17,7 @@ environment or update the information on the environment using the --update-envi
 
 
 @hookimpl(trylast=True)
-def pytask_log_session_header(session) -> None:
+def pytask_log_session_header(session: Session) -> None:
     """Check environment and python version.
 
     The solution is hacky. Exploit the first entry-point in the build process after the
@@ -70,7 +71,7 @@ def pytask_log_session_header(session) -> None:
 
 
 @orm.db_session
-def retrieve_package(name):
+def retrieve_package(name: str) -> str:
     """Return booleans indicating whether the version or path of a package changed."""
     try:
         package = Environment[name]
@@ -80,7 +81,7 @@ def retrieve_package(name):
 
 
 @orm.db_session
-def create_or_update_state(name, version, path):
+def create_or_update_state(name: str, version: str, path: str) -> None:
     """Create or update a state."""
     try:
         package_in_db = Environment[name]
