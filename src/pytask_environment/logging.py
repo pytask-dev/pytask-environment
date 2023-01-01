@@ -1,3 +1,4 @@
+"""This module contains everything related to logging."""
 from __future__ import annotations
 
 import sys
@@ -34,7 +35,7 @@ def pytask_log_session_header(session: Session) -> None:
         not session.config["check_python_version"]
         and not session.config["check_environment"]
     ):
-        return None
+        return
 
     package = retrieve_package("python")
 
@@ -43,7 +44,7 @@ def pytask_log_session_header(session: Session) -> None:
 
     # Bail out if everything is fine.
     if same_version and same_path:
-        return None
+        return
 
     msg = ""
     if not same_version and session.config["check_python_version"]:
