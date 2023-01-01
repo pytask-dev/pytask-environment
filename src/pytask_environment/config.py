@@ -1,3 +1,4 @@
+"""This module contains everything related to the configuration."""
 from __future__ import annotations
 
 from typing import Any
@@ -61,18 +62,18 @@ def _get_first_non_none_value(
     the order of the inputs while also providing a default.
 
     """
-    callback = (lambda x: x) if callback is None else callback  # noqa: E731
+    callback = (lambda x: x) if callback is None else callback
     processed_values = (callback(config.get(key)) for config in configs)
     return next((value for value in processed_values if value is not None), default)
 
 
 def _convert_truthy_or_falsy_to_bool(x: bool | str | None) -> bool:
     """Convert truthy or falsy value in .ini to Python boolean."""
-    if x in [True, "True", "true", "1"]:
+    if x in (True, "True", "true", "1"):
         out = True
-    elif x in [False, "False", "false", "0"]:
+    elif x in (False, "False", "false", "0"):
         out = False
-    elif x in [None, "None", "none"]:
+    elif x in (None, "None", "none"):
         out = None
     else:
         raise ValueError(

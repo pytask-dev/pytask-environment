@@ -5,6 +5,10 @@ reverse chronological order. Releases follow [semantic versioning](https://semve
 and all releases are available on
 [Anaconda.org](https://anaconda.org/conda-forge/pytask-environment).
 
+## 0.2.x - 2023-xx-xx
+
+- {pull}`17` adds ruff and refurb to pre-commits and fixes the banner.
+
 ## 0.2.0 - 2022-16-04
 
 - {pull}`15` aligns pytask-environment with pytask v0.2.0.

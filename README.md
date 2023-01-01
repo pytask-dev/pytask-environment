@@ -5,7 +5,7 @@
 [![image](https://img.shields.io/conda/vn/conda-forge/pytask-environment.svg)](https://anaconda.org/conda-forge/pytask-environment)
 [![image](https://img.shields.io/conda/pn/conda-forge/pytask-environment.svg)](https://anaconda.org/conda-forge/pytask-environment)
 [![PyPI - License](https://img.shields.io/pypi/l/pytask-environment)](https://pypi.org/project/pytask-environment)
-[![image](https://img.shields.io/github/workflow/status/pytask-dev/pytask-environment/Continuous%20Integration%20Workflow/main)](https://github.com/pytask-dev/pytask-environment/actions?query=branch%3Amain)
+[![image](https://img.shields.io/github/actions/workflow/status/pytask-dev/pytask-environment/main.yml?branch=main)](https://github.com/pytask-dev/pytask-environment/actions?query=branch%3Amain)
 [![image](https://codecov.io/gh/pytask-dev/pytask-environment/branch/main/graph/badge.svg)](https://codecov.io/gh/pytask-dev/pytask-environment)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/pytask-dev/pytask-environment/main.svg)](https://results.pre-commit.ci/latest/github/pytask-dev/pytask-environment/main)
 [![image](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
