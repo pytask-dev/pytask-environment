@@ -6,9 +6,14 @@ import textwrap
 import pytest
 from pony import orm
 from pytask import cli
-from pytask import db
 from pytask import ExitCode
 from pytask_environment.database import Environment
+
+# Can be removed with pytask v0.4.
+try:
+    from pytask import db
+except ImportError:
+    from _pytask.database_utils import db
 
 
 @pytest.mark.end_to_end()
@@ -16,7 +21,7 @@ def test_existence_of_python_executable_in_db(tmp_path, runner):
     """Test that the Python executable is stored in the database."""
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent("def task_dummy(): pass"))
-    tmp_path.joinpath("pytask.ini").write_text("[pytask]")
+    tmp_path.joinpath("pyproject.toml").write_text("[tool.pytask.ini_options]")
 
     result = runner.invoke(cli, [tmp_path.as_posix()])
 
@@ -33,14 +38,8 @@ def test_existence_of_python_executable_in_db(tmp_path, runner):
             orm.delete(e for e in entity)
 
 
-@pytest.mark.end_to_end()
-@pytest.mark.parametrize(
-    ("config_file", "content"),
-    [("pytask.ini", "[pytask]"), ("pyproject.toml", "[tool.pytask.ini_options]")],
-)
-def test_flow_when_python_version_has_changed(
-    monkeypatch, tmp_path, runner, config_file, content
-):
+@pytest.mark.end_to_end
+def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     """Test the whole use-case.
 
     1. Run a simple task to cache the Python version and path.
@@ -57,7 +56,7 @@ def test_flow_when_python_version_has_changed(
         "[MSC v.1916 64 bit (AMD64)]"
     )
 
-    tmp_path.joinpath(config_file).write_text(content)
+    tmp_path.joinpath("pyproject.toml").write_text("[tool.pytask.ini_options]")
     source = "def task_dummy(): pass"
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent(source))
@@ -97,25 +96,18 @@ def test_flow_when_python_version_has_changed(
             orm.delete(e for e in entity)
 
 
-@pytest.mark.end_to_end()
-@pytest.mark.parametrize(
-    ("config_file", "content"),
-    [
-        ("pytask.ini", "[pytask]\ncheck_python_version = {}"),
-        ("pyproject.toml", "[tool.pytask.ini_options]\ncheck_python_version = {}"),
-    ],
-)
-@pytest.mark.parametrize(
-    ("check_python_version", "expected"), [("true", 1), ("false", 0)]
-)
+@pytest.mark.end_to_end
+@pytest.mark.parametrize("check_python_version, expected", [("true", 1), ("false", 0)])
 def test_python_version_changed(
-    monkeypatch, tmp_path, runner, config_file, content, check_python_version, expected
+    monkeypatch, tmp_path, runner, check_python_version, expected
 ):
     fake_version = (
         "2.7.8 | packaged by conda-forge | (default, Jul 31 2020, 01:53:57) "
         "[MSC v.1916 64 bit (AMD64)]"
     )
-    tmp_path.joinpath(config_file).write_text(content.format(check_python_version))
+    tmp_path.joinpath("pyproject.toml").write_text(
+        f"[tool.pytask.ini_options]\ncheck_python_version = {check_python_version}"
+    )
     source = "def task_dummy(): pass"
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent(source))
@@ -137,21 +129,14 @@ def test_python_version_changed(
             orm.delete(e for e in entity)
 
 
-@pytest.mark.end_to_end()
-@pytest.mark.parametrize(
-    ("config_file", "content"),
-    [
-        ("pytask.ini", "[pytask]\ncheck_environment = {}"),
-        ("pyproject.toml", "[tool.pytask.ini_options]\ncheck_environment = {}"),
-    ],
-)
-@pytest.mark.parametrize(
-    ("check_python_version", "expected"), [("true", 1), ("false", 0)]
-)
+@pytest.mark.end_to_end
+@pytest.mark.parametrize("check_python_version, expected", [("true", 1), ("false", 0)])
 def test_environment_changed(
-    monkeypatch, tmp_path, runner, config_file, content, check_python_version, expected
+    monkeypatch, tmp_path, runner, check_python_version, expected
 ):
-    tmp_path.joinpath(config_file).write_text(content.format(check_python_version))
+    tmp_path.joinpath("pyproject.toml").write_text(
+        f"[tool.pytask.ini_options]\ncheck_environment = {check_python_version}"
+    )
     source = "def task_dummy(): pass"
     task_path = tmp_path.joinpath("task_dummy.py")
     task_path.write_text(textwrap.dedent(source))
