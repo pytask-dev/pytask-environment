@@ -9,6 +9,7 @@ from pytask import cli
 from pytask import ExitCode
 from pytask_environment.database import Environment
 
+# Can be removed with pytask v0.4.
 try:
     from pytask import db
 except ImportError:

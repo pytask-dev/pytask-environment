@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from pony import orm
 
+
+# Can be removed with pytask v0.4.
 try:
     from pytask import db
 except ImportError:
