@@ -68,16 +68,16 @@ def pytask_log_session_header(session: Session) -> None:
         pass
     else:
         console.print()
-        raise Exception(msg + "\n\n" + _ERROR_MSG) from None
+        raise Exception(msg + "\n\n" + _ERROR_MSG) from None  # noqa: TRY002
 
 
 @orm.db_session
-def retrieve_package(name: str) -> str:
+def retrieve_package(name: str) -> str | None:
     """Return booleans indicating whether the version or path of a package changed."""
     try:
-        package = Environment[name]
+        package = Environment[name]  # type: ignore[type-arg, valid-type]
     except orm.ObjectNotFound:
-        package = None
+        package = None  # type: ignore[misc]
     return package
 
 
@@ -85,7 +85,7 @@ def retrieve_package(name: str) -> str:
 def create_or_update_state(name: str, version: str, path: str) -> None:
     """Create or update a state."""
     try:
-        package_in_db = Environment[name]
+        package_in_db = Environment[name]  # type: ignore[type-arg, valid-type]
     except orm.ObjectNotFound:
         Environment(name=name, version=version, path=path)
     else:
