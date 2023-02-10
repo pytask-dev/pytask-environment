@@ -2,7 +2,11 @@
 from __future__ import annotations
 
 from pony import orm
-from pytask import db
+
+try:
+    from pytask import db
+except ImportError:
+    from _pytask.database_utils import db
 
 
 class Environment(db.Entity):
