@@ -6,7 +6,7 @@ from pony import orm
 try:
     from pytask import db
 except ImportError:
-    from _pytask.database import db
+    from _pytask.database_utils import db
 
 
 class Environment(db.Entity):
