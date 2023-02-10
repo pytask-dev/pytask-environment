@@ -10,7 +10,6 @@ from pytask import hookimpl
 @hookimpl
 def pytask_extend_command_line_interface(cli: click.Group) -> None:
     """Extend the cli."""
-    print("here")
     cli.commands["build"].params.append(
         click.Option(
             ["--update-environment"],
