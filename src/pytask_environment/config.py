@@ -17,7 +17,7 @@ def pytask_extend_command_line_interface(cli: click.Group) -> None:
             is_flag=True,
             default=None,
             help="Update the information on the environment stored in the database.",
-        ),
+        )
     )
 
 
@@ -77,6 +77,6 @@ def _convert_truthy_or_falsy_to_bool(x: bool | str | None) -> bool:
         out = None
     else:
         raise ValueError(
-            f"Input {x!r} is neither truthy (True, true, 1) or falsy (False, false, 0).",
+            f"Input {x!r} is neither truthy (True, true, 1) or falsy (False, false, 0)."
         )
     return out
