@@ -11,7 +11,7 @@ from pytask import ExitCode
 from pytask_environment.database import Environment
 
 
-@pytest.mark.end_to_end
+@pytest.mark.end_to_end()
 def test_existence_of_python_executable_in_db(tmp_path, runner):
     """Test that the Python executable is stored in the database."""
     task_path = tmp_path.joinpath("task_dummy.py")
@@ -33,9 +33,9 @@ def test_existence_of_python_executable_in_db(tmp_path, runner):
             orm.delete(e for e in entity)
 
 
-@pytest.mark.end_to_end
+@pytest.mark.end_to_end()
 @pytest.mark.parametrize(
-    "config_file, content",
+    ("config_file", "content"),
     [("pytask.ini", "[pytask]"), ("pyproject.toml", "[tool.pytask.ini_options]")],
 )
 def test_flow_when_python_version_has_changed(
@@ -97,15 +97,17 @@ def test_flow_when_python_version_has_changed(
             orm.delete(e for e in entity)
 
 
-@pytest.mark.end_to_end
+@pytest.mark.end_to_end()
 @pytest.mark.parametrize(
-    "config_file, content",
+    ("config_file", "content"),
     [
         ("pytask.ini", "[pytask]\ncheck_python_version = {}"),
         ("pyproject.toml", "[tool.pytask.ini_options]\ncheck_python_version = {}"),
     ],
 )
-@pytest.mark.parametrize("check_python_version, expected", [("true", 1), ("false", 0)])
+@pytest.mark.parametrize(
+    ("check_python_version", "expected"), [("true", 1), ("false", 0)]
+)
 def test_python_version_changed(
     monkeypatch, tmp_path, runner, config_file, content, check_python_version, expected
 ):
@@ -135,15 +137,17 @@ def test_python_version_changed(
             orm.delete(e for e in entity)
 
 
-@pytest.mark.end_to_end
+@pytest.mark.end_to_end()
 @pytest.mark.parametrize(
-    "config_file, content",
+    ("config_file", "content"),
     [
         ("pytask.ini", "[pytask]\ncheck_environment = {}"),
         ("pyproject.toml", "[tool.pytask.ini_options]\ncheck_environment = {}"),
     ],
 )
-@pytest.mark.parametrize("check_python_version, expected", [("true", 1), ("false", 0)])
+@pytest.mark.parametrize(
+    ("check_python_version", "expected"), [("true", 1), ("false", 0)]
+)
 def test_environment_changed(
     monkeypatch, tmp_path, runner, config_file, content, check_python_version, expected
 ):
