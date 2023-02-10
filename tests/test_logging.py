@@ -6,9 +6,13 @@ import textwrap
 import pytest
 from pony import orm
 from pytask import cli
-from pytask import db
 from pytask import ExitCode
 from pytask_environment.database import Environment
+
+try:
+    from pytask import db
+except ImportError:
+    from _pytask.database_utils import db
 
 
 @pytest.mark.end_to_end
