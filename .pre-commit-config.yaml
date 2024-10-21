@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v5.0.0
     hooks:
     -   id: check-added-large-files
         args: ['--maxkb=100']
@@ -25,35 +25,35 @@ repos:
     -   id: python-no-log-warn
     -   id: python-use-type-annotations
     -   id: text-unicode-replacement-char
--   repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.9.0
+-   repo: https://github.com/asottile/reorder-python-imports
+    rev: v3.14.0
     hooks:
     -   id: reorder-python-imports
         args: [--py37-plus, --add-import, 'from __future__ import annotations']
 -   repo: https://github.com/psf/black
-    rev: 23.1.0
+    rev: 24.10.0
     hooks:
     -   id: black
--   repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.244
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.0
     hooks:
       - id: ruff
 -   repo: https://github.com/dosisod/refurb
-    rev: v1.12.0
+    rev: v2.0.0
     hooks:
     -   id: refurb
         args: [--ignore, FURB126]
 -   repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v2.2.0
+    rev: v2.7.0
     hooks:
     -   id: setup-cfg-fmt
 -   repo: https://github.com/econchick/interrogate
-    rev: 1.5.0
+    rev: 1.7.0
     hooks:
     -   id: interrogate
         args: [-v, --fail-under=40, src, tests]
 -   repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.16
+    rev: 0.7.18
     hooks:
     -   id: mdformat
         additional_dependencies: [
@@ -62,13 +62,13 @@ repos:
         ]
         args: [--wrap, "88"]
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.2
+  rev: v2.3.0
   hooks:
     -   id: codespell
         args: [-L als, -L unparseable]
         additional_dependencies: ["tomli"]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.0.0'
+    rev: 'v1.12.1'
     hooks:
     -   id: mypy
         args: [
@@ -82,7 +82,7 @@ repos:
         ]
         pass_filenames: false
 -   repo: https://github.com/mgedmin/check-manifest
-    rev: "0.49"
+    rev: "0.50"
     hooks:
     -   id: check-manifest
         args: [--no-build-isolation]
