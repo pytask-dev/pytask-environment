@@ -1,4 +1,5 @@
 """This module contains everything related to logging."""
+
 from __future__ import annotations
 
 import sys

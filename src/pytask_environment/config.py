@@ -1,4 +1,5 @@
 """This module contains everything related to the configuration."""
+
 from __future__ import annotations
 
 from typing import Any
