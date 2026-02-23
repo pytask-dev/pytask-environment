@@ -1,8 +1,8 @@
 """This module contains everything related to the database."""
+
 from __future__ import annotations
 
 from pony import orm
-
 
 # Can be removed with pytask v0.4.
 try:
