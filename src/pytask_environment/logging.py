@@ -1,4 +1,5 @@
 """This module contains everything related to logging."""
+
 from __future__ import annotations
 
 import sys
@@ -8,7 +9,6 @@ from pytask import console
 from pytask import hookimpl
 from pytask import Session
 from pytask_environment.database import Environment
-
 
 _ERROR_MSG = """\
 Aborted execution due to a bad state of the environment. Either switch to the correct \
