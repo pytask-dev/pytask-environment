@@ -16,6 +16,16 @@ except ImportError:
     from _pytask.database_utils import db
 
 
+def _clear_database() -> None:
+    """Delete records without using generator decompilation in Pony ORM."""
+    for entity in db.entities.values():
+        for record in entity.select():
+            record.delete()
+
+
+_FAKE_CPYTHON_VERSION = "2.7.18 (main, Jul 31 2020, 01:53:57) [Clang 14.0.0]"
+
+
 @pytest.mark.end_to_end
 def test_existence_of_python_executable_in_db(tmp_path, runner):
     """Test that the Python executable is stored in the database."""
@@ -34,8 +44,7 @@ def test_existence_of_python_executable_in_db(tmp_path, runner):
         assert python.path == sys.executable
 
         orm.rollback()
-        for entity in db.entities.values():
-            orm.delete(e for e in entity)
+        _clear_database()
 
 
 @pytest.mark.end_to_end
@@ -51,10 +60,6 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     """
     real_python_version = sys.version
     real_python_executable = sys.executable
-    fake_version = (
-        "2.7.8 | packaged by conda-forge | (default, Jul 31 2020, 01:53:57) "
-        "[MSC v.1916 64 bit (AMD64)]"
-    )
 
     tmp_path.joinpath("pyproject.toml").write_text("[tool.pytask.ini_options]")
     source = "def task_dummy(): pass"
@@ -67,7 +72,7 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
-    monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
+    monkeypatch.setattr("pytask_environment.logging.sys.version", _FAKE_CPYTHON_VERSION)
 
     result = runner.invoke(cli)
     assert result.exit_code == ExitCode.FAILED
@@ -79,7 +84,7 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     assert python.path == real_python_executable
 
     # Run with a fake version and updating the environment.
-    monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
+    monkeypatch.setattr("pytask_environment.logging.sys.version", _FAKE_CPYTHON_VERSION)
     monkeypatch.setattr("pytask_environment.logging.sys.executable", "new_path")
 
     result = runner.invoke(cli, ["--update-environment", tmp_path.as_posix()])
@@ -88,12 +93,11 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
     with orm.db_session:
         python = Environment["python"]
 
-        assert python.version == fake_version
+        assert python.version == _FAKE_CPYTHON_VERSION
         assert python.path == "new_path"
 
         orm.rollback()
-        for entity in db.entities.values():
-            orm.delete(e for e in entity)
+        _clear_database()
 
 
 @pytest.mark.end_to_end
@@ -103,10 +107,6 @@ def test_flow_when_python_version_has_changed(monkeypatch, tmp_path, runner):
 def test_python_version_changed(
     monkeypatch, tmp_path, runner, check_python_version, expected
 ):
-    fake_version = (
-        "2.7.8 | packaged by conda-forge | (default, Jul 31 2020, 01:53:57) "
-        "[MSC v.1916 64 bit (AMD64)]"
-    )
     tmp_path.joinpath("pyproject.toml").write_text(
         f"[tool.pytask.ini_options]\ncheck_python_version = {check_python_version}"
     )
@@ -120,15 +120,14 @@ def test_python_version_changed(
     assert "Updating the information" in result.output
 
     # Run with a fake version and not updating the environment.
-    monkeypatch.setattr("pytask_environment.logging.sys.version", fake_version)
+    monkeypatch.setattr("pytask_environment.logging.sys.version", _FAKE_CPYTHON_VERSION)
 
     result = runner.invoke(cli, [tmp_path.as_posix()])
     assert result.exit_code == expected
 
     with orm.db_session:
         orm.rollback()
-        for entity in db.entities.values():
-            orm.delete(e for e in entity)
+        _clear_database()
 
 
 @pytest.mark.end_to_end
@@ -158,5 +157,4 @@ def test_environment_changed(
 
     with orm.db_session:
         orm.rollback()
-        for entity in db.entities.values():
-            orm.delete(e for e in entity)
+        _clear_database()
